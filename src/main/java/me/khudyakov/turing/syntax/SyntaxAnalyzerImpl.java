@@ -18,11 +18,11 @@ package me.khudyakov.turing.syntax;
  * MOVE_DIRECTION -> L | R | H
  * INPUT_DEF -> input: [ INPUT_LIST ]
  * INPUT_LIST -> INPUT_STR | INPUT_LIST , INPUT_STR
- * INPUT_STR -> 'SYMBOL_LIST'
+ * INPUT_STR -> "SYMBOL_LIST"
  * SYMBOL_LIST -> SYMBOL | SYMBOL_LIST SYMBOL
  * SYMBOL -> ' ' | NOT_BLANK_SYMBOL
- * NOT_BLANK_SYMBOL -> a | b | ... | z | A | B | ... | Z | 0 | 1 | ... | 9
  * ID -> NOT_BLANK_SYMBOL | ID NOT_BLANK_SYMBOL
+ * NOT_BLANK_SYMBOL -> any Unicode symbol except delimiters and brackets
  */
 public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 
