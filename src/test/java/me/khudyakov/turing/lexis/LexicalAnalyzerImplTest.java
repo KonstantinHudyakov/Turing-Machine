@@ -23,9 +23,8 @@ class LexicalAnalyzerImplTest {
                 "    [0, ' ']: {write: 1, L: done}\n" +
                 "  }\n" +
                 "  done: {}\n" +
-                "}\n" +
-                "input: [\"1011\"]";
-        String expected = "[startState, :, right, rules, :, {, right, :, {, [, 1, ,, 0, ], :, R,  , :, {, L, :, carry, }, }, carry, :, {, 1, :, {, write, :, 0, ,, L, }, [, 0, ,,  , ], :, {, write, :, 1, ,, L, :, done, }, }, done, :, {, }, }, input, :, [, 1011, ]]";
+                "}\n";
+        String expected = "[startState, :, right, rules, :, {, right, :, {, [, 1, ,, 0, ], :, R,  , :, {, L, :, carry, }, }, carry, :, {, 1, :, {, write, :, 0, ,, L, }, [, 0, ,,  , ], :, {, write, :, 1, ,, L, :, done, }, }, done, :, {, }, }]";
 
         List<Token> tokens = lexicalAnalyzer.analyze(input);
         assertEquals(expected, tokens.toString());

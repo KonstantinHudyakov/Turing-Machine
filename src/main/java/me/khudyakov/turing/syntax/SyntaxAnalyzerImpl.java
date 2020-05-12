@@ -15,11 +15,7 @@ package me.khudyakov.turing.syntax;
  *      | { write : SYMBOL, MOVE_DIRECTION }
  *      | { write : SYMBOL, MOVE_DIRECTION : ID }
  *      | { MOVE_DIRECTION : ID }
- * MOVE_DIRECTION -> L | R | H
- * INPUT_DEF -> input: [ INPUT_LIST ]
- * INPUT_LIST -> INPUT_STR | INPUT_LIST , INPUT_STR
- * INPUT_STR -> "SYMBOL_LIST"
- * SYMBOL_LIST -> SYMBOL | SYMBOL_LIST SYMBOL
+ * MOVE_DIRECTION -> L | R
  * SYMBOL -> ' ' | NOT_BLANK_SYMBOL
  * ID -> NOT_BLANK_SYMBOL | ID NOT_BLANK_SYMBOL
  * NOT_BLANK_SYMBOL -> any Unicode symbol except delimiters and brackets

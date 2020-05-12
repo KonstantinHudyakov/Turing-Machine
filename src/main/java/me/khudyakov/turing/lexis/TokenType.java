@@ -14,7 +14,6 @@ public enum TokenType {
     OPEN_BRACKET,
     CLOSE_BRACKET,
 
-    // Atoms
-    IDENTIFIER,
-    INPUT_STR
+    // Atom
+    IDENTIFIER
 }

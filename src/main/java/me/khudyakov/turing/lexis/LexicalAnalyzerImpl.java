@@ -30,12 +30,6 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                     i += word.length() + 1;
                     break;
                 }
-                case '"': {
-                    String word = readUntil(text, i + 1, '"');
-                    token = new Token(word, INPUT_STR);
-                    i += word.length() + 1;
-                    break;
-                }
                 case ',': {
                     token = new Token(",", COMMA);
                     break;
