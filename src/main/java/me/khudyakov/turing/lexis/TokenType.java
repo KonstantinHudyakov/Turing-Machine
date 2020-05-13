@@ -5,6 +5,7 @@ public enum TokenType {
     START_STATE,
     RULES,
     INPUT,
+    WRITE,
 
     // Delimiters
     COLON,

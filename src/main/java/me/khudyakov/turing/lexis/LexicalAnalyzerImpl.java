@@ -65,6 +65,9 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                         case "input":
                             token = new Token(word, INPUT);
                             break;
+                        case "write":
+                            token = new Token(word, WRITE);
+                            break;
                         default:
                             token = new Token(word, IDENTIFIER);
                     }
