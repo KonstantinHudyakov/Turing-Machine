@@ -22,10 +22,10 @@ public class TuringMachineImpl implements TuringMachine {
 
     public static class Action {
         private final Character symbolToWrite;
-        private final Character moveDirection;
+        private final MoveDirection moveDirection;
         private final String newState;
 
-        public Action(Character symbolToWrite, Character moveDirection, String newState) {
+        public Action(Character symbolToWrite, MoveDirection moveDirection, String newState) {
             this.symbolToWrite = symbolToWrite;
             this.moveDirection = moveDirection;
             this.newState = newState;
@@ -35,12 +35,16 @@ public class TuringMachineImpl implements TuringMachine {
             return symbolToWrite;
         }
 
-        public Character getMoveDirection() {
+        public MoveDirection getMoveDirection() {
             return moveDirection;
         }
 
         public String getNewState() {
             return newState;
         }
+    }
+
+    public enum MoveDirection {
+        L, R
     }
 }
