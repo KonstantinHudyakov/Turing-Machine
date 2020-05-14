@@ -39,10 +39,7 @@ public interface TuringMachine {
 
         @Override
         public String toString() {
-            return "Result{" +
-                    "outputString='" + outputString + '\'' +
-                    ", endState='" + endState + '\'' +
-                    '}';
+            return String.format("Output string: %s\nEnd state: %s", outputString, endState);
         }
     }
 }

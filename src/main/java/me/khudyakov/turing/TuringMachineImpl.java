@@ -24,12 +24,11 @@ public class TuringMachineImpl implements TuringMachine {
             canMove = executor.doStep();
         }
 
-        String output = executor.getTape()
-                                .view()
-                                .stream()
-                                .collect(Collector.of(StringBuilder::new, StringBuilder::append, StringBuilder::append, StringBuilder::toString))
-                                .trim();
-        return new Result(output, executor.getCurState());
+        return executor.getCurResult();
+    }
+
+    public Executor executor(String input) {
+        return new Executor(input);
     }
 
     public class Executor {
@@ -45,7 +44,7 @@ public class TuringMachineImpl implements TuringMachine {
             Map<Character, Action> curStateRules = rules.get(curState);
             char curSymbol = tape.getCur();
             Action action = curStateRules.get(curSymbol);
-            if(action != null) {
+            if (action != null) {
                 tape.typeAndMove(action.getSymbolToWrite(), action.getMoveDirection());
                 curState = action.getNewState();
                 return true;
@@ -61,9 +60,17 @@ public class TuringMachineImpl implements TuringMachine {
         public String getCurState() {
             return curState;
         }
+
+        public Result getCurResult() {
+            String output = tape.view()
+                                .stream()
+                                .collect(Collector.of(StringBuilder::new, StringBuilder::append, StringBuilder::append, StringBuilder::toString))
+                                .trim();
+            return new Result(output, curState);
+        }
     }
 
-    private static class Tape {
+    public static class Tape {
         private final List<Character> tape;
         private final ListIterator<Character> iterator;
 
@@ -76,7 +83,7 @@ public class TuringMachineImpl implements TuringMachine {
 
         public void typeAndMove(Character symbolToType, MoveDirection moveDirection) {
             iterator.set(symbolToType);
-            if(moveDirection == MoveDirection.R) {
+            if (moveDirection == MoveDirection.R) {
                 moveToNext();
             } else {
                 moveToPrev();
@@ -84,14 +91,14 @@ public class TuringMachineImpl implements TuringMachine {
         }
 
         private void moveToPrev() {
-            if(!iterator.hasPrevious()) {
+            if (!iterator.hasPrevious()) {
                 iterator.add(' ');
             }
             iterator.previous();
         }
 
         private void moveToNext() {
-            if(iterator.hasNext()) {
+            if (iterator.hasNext()) {
                 iterator.next();
             } else {
                 iterator.add(' ');
@@ -99,13 +106,21 @@ public class TuringMachineImpl implements TuringMachine {
         }
 
         public char getCur() {
-            if(!iterator.hasNext()) {
+            if (!iterator.hasNext()) {
                 iterator.add(' ');
                 iterator.previous();
             }
             Character cur = iterator.next();
             iterator.previous();
             return cur;
+        }
+
+        public int getCurIndex() {
+            if (!iterator.hasNext()) {
+                iterator.add(' ');
+                iterator.previous();
+            }
+            return iterator.nextIndex();
         }
 
         public List<Character> view() {
