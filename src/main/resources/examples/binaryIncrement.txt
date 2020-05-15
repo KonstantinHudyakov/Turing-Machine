@@ -1,0 +1,15 @@
+name: "Binary Increment"
+definition: "startState: right
+ rules: {
+   right: {
+     [1,0]: R
+     ' ': {L: carry}
+   }
+   carry: {
+     1: {write: 0, L}
+     [0, ' ']: {write: 1, L: done}
+   }
+   done: {}
+ }
+"
+input: "10111"

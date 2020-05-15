@@ -9,10 +9,14 @@ import me.khudyakov.turing.lexis.Token;
 import me.khudyakov.turing.syntax.SyntaxAnalyzer;
 import me.khudyakov.turing.syntax.SyntaxAnalyzerException;
 import me.khudyakov.turing.syntax.SyntaxAnalyzerImpl;
+import me.khudyakov.turing.util.Example;
+import me.khudyakov.turing.util.ExamplesParser;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -20,6 +24,7 @@ public class EditorGUI extends JFrame {
 
     private final LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzerImpl();
     private final SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzerImpl();
+    private final ExamplesParser examplesParser = new ExamplesParser();
 
     private ExecutionManager executionManager;
 
@@ -113,18 +118,7 @@ public class EditorGUI extends JFrame {
     private JButton createLoadButton() {
         JButton loadButton = new JButton("Load");
         loadButton.setFont(font);
-        loadButton.addActionListener(event -> {
-            String input = inputField.getText();
-            addStringToTape(input);
-
-            TuringMachineImpl turingMachine = createTuringMachine();
-            if (turingMachine != null) {
-                executionManager = new ExecutionManager(turingMachine.executor(input), tape);
-                outputArea.setText("");
-            } else {
-                executionManager = null;
-            }
-        });
+        loadButton.addActionListener(this::handleLoadButtonClick);
 
         return loadButton;
     }
@@ -175,6 +169,7 @@ public class EditorGUI extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         menuBar.add(fileMenu());
+        menuBar.add(examplesMenu());
 
         return menuBar;
     }
@@ -190,6 +185,42 @@ public class EditorGUI extends JFrame {
 
         fileMenu.add(exit);
         return fileMenu;
+    }
+
+    private JMenu examplesMenu() {
+        JMenu examplesMenu = new JMenu("Examples");
+
+        try {
+            List<Example> examples = examplesParser.loadExamples();
+            examples.stream()
+                    .map(example -> {
+                        JMenuItem menuItem = new JMenuItem(example.getName());
+                        menuItem.addActionListener(event -> {
+                            codeArea.setText(example.getDefinition());
+                            inputField.setText(example.getInput());
+                            handleLoadButtonClick(null);
+                        });
+                        return menuItem;
+                    })
+                    .forEach(examplesMenu::add);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return examplesMenu;
+    }
+
+    private void handleLoadButtonClick(ActionEvent actionEvent) {
+        String input = inputField.getText();
+        addStringToTape(input);
+
+        TuringMachineImpl turingMachine = createTuringMachine();
+        if (turingMachine != null) {
+            executionManager = new ExecutionManager(turingMachine.executor(input), tape);
+            outputArea.setText("");
+        } else {
+            executionManager = null;
+        }
     }
 
     private TuringMachineImpl createTuringMachine() {
