@@ -76,9 +76,12 @@ public class EditorGUI extends JFrame {
     }
 
     private JTable createTape() {
-        JTable tape = new JTable(1, 11);
+        JTable tape = new JTable(1, 13);
+        tape.setEnabled(false);
         tape.setCellSelectionEnabled(false);
-        tape.setRowHeight(60);
+        tape.setRowHeight(50);
+        IntStream.range(0, tape.getColumnCount())
+                 .forEach(ind -> tape.getColumnModel().getColumn(ind).setMaxWidth(60));
         tape.setFont(new Font("Serif", Font.BOLD, 40));
 
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
@@ -172,7 +175,6 @@ public class EditorGUI extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         menuBar.add(fileMenu());
-        menuBar.add(runMenu());
 
         return menuBar;
     }
@@ -188,13 +190,6 @@ public class EditorGUI extends JFrame {
 
         fileMenu.add(exit);
         return fileMenu;
-    }
-
-    private JMenu runMenu() {
-        JMenu runMenu = new JMenu("Run");
-        runMenu.setPreferredSize(new Dimension(40, 20));
-
-        return runMenu;
     }
 
     private TuringMachineImpl createTuringMachine() {
@@ -221,9 +216,5 @@ public class EditorGUI extends JFrame {
     private void clearTape() {
         IntStream.range(0, tape.getColumnCount())
                  .forEach(ind -> tape.setValueAt(' ', 0, ind));
-    }
-
-    public JTextArea getCodeArea() {
-        return codeArea;
     }
 }
