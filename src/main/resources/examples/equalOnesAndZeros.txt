@@ -1,0 +1,33 @@
+name: "Equal Ones and Zeros"
+definition: "startState: start
+rules: {
+  start: {
+    0: {write: x, R: findOne}
+    1: {write: x, R: findZero}
+    ' ': {R: accept}
+  }
+  findOne: {
+    [0, x]: R
+    1: {write: x, L: moveBack}
+    ' ': {R: reject}
+  }
+  findZero: {
+    [1, x]: R
+    0: {write: x, L: moveBack}
+    ' ': {R: reject}
+  }
+  moveBack: {
+    [0, 1, x]: L
+    ' ': {R: findNumber}
+  }
+  findNumber: {
+    x: R
+    0: {write: x, R: findOne}
+    1: {write: x, R: findZero}
+    ' ': {R: accept}
+  }
+  accept: {}
+  reject: {}
+}
+"
+input: "100110"

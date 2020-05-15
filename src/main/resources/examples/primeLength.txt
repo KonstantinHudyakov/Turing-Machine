@@ -1,0 +1,72 @@
+name: "Prime Length"
+definition: "startState: start
+rules: {
+  start: {
+    1: {R: checkOnlyOne}
+    ' ': {L: reject}
+  }
+  checkOnlyOne: {
+    1: {L: normalStart}
+    ' ': {L: reject}
+  }
+  normalStart: {
+    1: R
+    ' ': {write: d, R: typeSecondD}
+  }
+  typeSecondD: {
+    ' ': {write: d, R: startChecking}
+  }
+  startChecking: {
+    ' ': {L: getD}
+  }
+  getD: {
+    d: {write: D, L: mark}
+    m: {L: checkAlreadyDivided}
+  }
+  checkAlreadyDivided: {
+    m: L
+    1: {R: divisorCleanup}
+    ' ': {R: checkEquals}
+  }
+  mark: {
+    [d, m]: L
+    1: {write: m, R: goToEndAndGetD}
+    ' ': {R: fullCleanup}
+  }
+  goToEndAndGetD: {
+    [m, d]: R
+    D: {L: getD}
+  }
+  divisorCleanup: {
+    m: R
+    D: {write: d, R}
+    ' ': {L: getD}
+  }
+  fullCleanup: {
+    d: R
+    m: {write: 1, R}
+    D: {write: d, R}
+    ' ': {L: increaseDivisor}
+  }
+  increaseDivisor: {
+    [1, d]: R
+    ' ': {write: d, R: startChecking}
+  }
+  checkEquals: {
+    m: {write: 1, R: findD2}
+  }
+  findD2: {
+    [m, d, 1]: R
+    D: {write: d, L: findM2}
+    ' ': {R: reject}
+  }
+  findM2: {
+    [1, d]: L
+    m: {write: 1, R: findD2}
+    ' ': {R: accept}
+  }
+  accept: {}
+  reject: {}
+}
+"
+input: "11111"
