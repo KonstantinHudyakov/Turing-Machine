@@ -1,5 +1,6 @@
 package me.khudyakov.turing.lexis;
 
+import me.khudyakov.turing.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,20 +12,27 @@ class LexicalAnalyzerImplTest {
     private final LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzerImpl();
 
     @Test
-    public void analyze() {
-        String input = "startState: right\n" +
-                "rules: {\n" +
-                "  right: {\n" +
-                "    [1,0]: R\n" +
-                "    ' ': {L: carry}\n" +
-                "  }\n" +
-                "  carry: {\n" +
-                "    1: {write: 0, L}\n" +
-                "    [0, ' ']: {write: 1, L: done}\n" +
-                "  }\n" +
-                "  done: {}\n" +
-                "}\n";
+    public void analyzeBinaryIncrement() {
+        String input = TestUtils.getTuringMachineExample(0);
         String expected = "[startState, :, right, rules, :, {, right, :, {, [, 1, ,, 0, ], :, R,  , :, {, L, :, carry, }, }, carry, :, {, 1, :, {, write, :, 0, ,, L, }, [, 0, ,,  , ], :, {, write, :, 1, ,, L, :, done, }, }, done, :, {, }, }]";
+
+        List<Token> tokens = lexicalAnalyzer.analyze(input);
+        assertEquals(expected, tokens.toString());
+    }
+
+    @Test
+    public void analyzeEqualOnesAndZeros() {
+        String input = TestUtils.getTuringMachineExample(1);
+        String expected = "[startState, :, start, rules, :, {, start, :, {, 0, :, {, write, :, x, ,, R, :, findOne, }, 1, :, {, write, :, x, ,, R, :, findZero, },  , :, {, R, :, accept, }, }, findOne, :, {, [, 0, ,, x, ], :, R, 1, :, {, write, :, x, ,, L, :, moveBack, },  , :, {, R, :, reject, }, }, findZero, :, {, [, 1, ,, x, ], :, R, 0, :, {, write, :, x, ,, L, :, moveBack, },  , :, {, R, :, reject, }, }, moveBack, :, {, [, 0, ,, 1, ,, x, ], :, L,  , :, {, R, :, findNumber, }, }, findNumber, :, {, x, :, R, 0, :, {, write, :, x, ,, R, :, findOne, }, 1, :, {, write, :, x, ,, R, :, findZero, },  , :, {, R, :, accept, }, }, accept, :, {, }, reject, :, {, }, }]";
+
+        List<Token> tokens = lexicalAnalyzer.analyze(input);
+        assertEquals(expected, tokens.toString());
+    }
+
+    @Test
+    public void analyzeEqualPrimeLength() {
+        String input = TestUtils.getTuringMachineExample(2);
+        String expected = "[startState, :, start, rules, :, {, start, :, {, 1, :, {, R, :, checkOnlyOne, },  , :, {, L, :, reject, }, }, checkOnlyOne, :, {, 1, :, {, L, :, normalStart, },  , :, {, L, :, reject, }, }, normalStart, :, {, 1, :, R,  , :, {, write, :, d, ,, R, :, typeSecondD, }, }, typeSecondD, :, {,  , :, {, write, :, d, ,, R, :, startChecking, }, }, startChecking, :, {,  , :, {, L, :, getD, }, }, getD, :, {, d, :, {, write, :, D, ,, L, :, mark, }, m, :, {, L, :, checkAlreadyDivided, }, }, checkAlreadyDivided, :, {, m, :, L, 1, :, {, R, :, divisorCleanup, },  , :, {, R, :, checkEquals, }, }, mark, :, {, [, d, ,, m, ], :, L, 1, :, {, write, :, m, ,, R, :, goToEndAndGetD, },  , :, {, R, :, fullCleanup, }, }, goToEndAndGetD, :, {, [, m, ,, d, ], :, R, D, :, {, L, :, getD, }, }, divisorCleanup, :, {, m, :, R, D, :, {, write, :, d, ,, R, },  , :, {, L, :, getD, }, }, fullCleanup, :, {, d, :, R, m, :, {, write, :, 1, ,, R, }, D, :, {, write, :, d, ,, R, },  , :, {, L, :, increaseDivisor, }, }, increaseDivisor, :, {, [, 1, ,, d, ], :, R,  , :, {, write, :, d, ,, R, :, startChecking, }, }, checkEquals, :, {, m, :, {, write, :, 1, ,, R, :, findD2, }, }, findD2, :, {, [, m, ,, d, ,, 1, ], :, R, D, :, {, write, :, d, ,, L, :, findM2, },  , :, {, R, :, reject, }, }, findM2, :, {, [, 1, ,, d, ], :, L, m, :, {, write, :, 1, ,, R, :, findD2, },  , :, {, R, :, accept, }, }, accept, :, {, }, reject, :, {, }, }]";
 
         List<Token> tokens = lexicalAnalyzer.analyze(input);
         assertEquals(expected, tokens.toString());

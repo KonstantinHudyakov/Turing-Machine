@@ -1,5 +1,6 @@
 package me.khudyakov.turing.syntax;
 
+import me.khudyakov.turing.TestUtils;
 import me.khudyakov.turing.TuringMachine;
 import me.khudyakov.turing.lexis.LexicalAnalyzer;
 import me.khudyakov.turing.lexis.LexicalAnalyzerImpl;
@@ -16,19 +17,28 @@ class SyntaxAnalyzerImplTest {
     private final SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzerImpl();
 
     @Test
-    void analyze() {
-        String input = "startState: right\n" +
-                "rules: {\n" +
-                "  right: {\n" +
-                "    [1,0]: R\n" +
-                "    ' ': {L: carry}\n" +
-                "  }\n" +
-                "  carry: {\n" +
-                "    1: {write: 0, L}\n" +
-                "    [0, ' ']: {write: 1, L: done}\n" +
-                "  }\n" +
-                "  done: {}\n" +
-                "}\n";
+    void analyzeBinaryIncrement() {
+        String input = TestUtils.getTuringMachineExample(0);
+
+        List<Token> tokens = lexicalAnalyzer.analyze(input);
+        TuringMachine turingMachine = syntaxAnalyzer.analyze(tokens);
+
+        assertNotNull(turingMachine);
+    }
+
+    @Test
+    void analyzeEqualOnesAndZeros() {
+        String input = TestUtils.getTuringMachineExample(1);
+
+        List<Token> tokens = lexicalAnalyzer.analyze(input);
+        TuringMachine turingMachine = syntaxAnalyzer.analyze(tokens);
+
+        assertNotNull(turingMachine);
+    }
+
+    @Test
+    void analyzePrimeLength() {
+        String input = TestUtils.getTuringMachineExample(2);
 
         List<Token> tokens = lexicalAnalyzer.analyze(input);
         TuringMachine turingMachine = syntaxAnalyzer.analyze(tokens);
