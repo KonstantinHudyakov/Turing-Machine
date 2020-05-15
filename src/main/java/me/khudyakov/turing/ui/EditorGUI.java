@@ -28,26 +28,22 @@ public class EditorGUI extends JFrame {
 
     private ExecutionManager executionManager;
 
-    private final JTextArea codeArea;
-    private final JTextArea outputArea;
+    private JTextArea codeArea;
+    private JTextArea outputArea;
     private JTable tape;
     private JTextField inputField;
     private final Font font = new Font("Serif", Font.PLAIN, 20);
 
     public EditorGUI() {
-        super("JavaEdit");
-        codeArea = createCodeArea();
-        JScrollPane codeAreaScroll = new JScrollPane(codeArea);
-
-        outputArea = createOutputArea();
-        JScrollPane outputAreaScroll = new JScrollPane(outputArea);
+        super("Turing Machine Interpreter");
+        JPanel codeAreaPanel = createCodeAreaPanel();
+        JScrollPane outputAreaScroll = createOutputArea();
         JPanel centerPane = createCenterPane();
 
-        createEditorWindow(codeAreaScroll, outputAreaScroll, centerPane);
+        createEditorWindow(codeAreaPanel, outputAreaScroll, centerPane);
     }
 
-    private void createEditorWindow(JScrollPane codeAreaScroll, JScrollPane outputAreaScroll, JPanel centerPane) {
-        setName("Turing Machine");
+    private void createEditorWindow(JPanel codeAreaPanel, JScrollPane outputAreaScroll, JPanel centerPane) {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setJMenuBar(createMenuBar());
 
@@ -56,7 +52,7 @@ public class EditorGUI extends JFrame {
         setContentPane(contentPane);
 
         add(centerPane, BorderLayout.CENTER);
-        add(codeAreaScroll, BorderLayout.NORTH);
+        add(codeAreaPanel, BorderLayout.NORTH);
         add(outputAreaScroll, BorderLayout.SOUTH);
 
         pack();
@@ -147,22 +143,31 @@ public class EditorGUI extends JFrame {
         return step;
     }
 
-    private JTextArea createCodeArea() {
-        JTextArea codeArea = new JTextArea(10, 50);
+    private JPanel createCodeAreaPanel() {
+        JPanel codeAreaPanel = new JPanel(new BorderLayout());
+
+        codeArea = new JTextArea(10, 50);
         codeArea.setEditable(true);
         codeArea.setBorder(BorderFactory.createLoweredBevelBorder());
         codeArea.setFont(new Font("Consolas", Font.PLAIN, 16));
+        JScrollPane codeAreaScroll = new JScrollPane(codeArea);
 
-        return codeArea;
+        JLabel codeAreaLabel = new JLabel("Define your Turing Machine:");
+        codeAreaLabel.setFont(font);
+
+        codeAreaPanel.add(codeAreaScroll, BorderLayout.CENTER);
+        codeAreaPanel.add(codeAreaLabel, BorderLayout.NORTH);
+
+        return codeAreaPanel;
     }
 
-    private JTextArea createOutputArea() {
-        JTextArea outputArea = new JTextArea(5, 50);
+    private JScrollPane createOutputArea() {
+        outputArea = new JTextArea(5, 50);
         outputArea.setEditable(false);
         outputArea.setBorder(BorderFactory.createLoweredBevelBorder());
         outputArea.setFont(new Font("Consolas", Font.PLAIN, 16));
 
-        return outputArea;
+        return new JScrollPane(outputArea);
     }
 
     private JMenuBar createMenuBar() {
