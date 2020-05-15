@@ -1,5 +1,8 @@
 name: "Prime Length"
-definition: "startState: start
+definition: "// Turing Machine that accepts strings of ones with prime length
+// Example: '11111' ending in state 'accept'
+// Example: '1111' ending in state 'reject'
+startState: start
 rules: {
   start: {
     1: {R: checkOnlyOne}

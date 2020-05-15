@@ -16,5 +16,6 @@ public enum TokenType {
     CLOSE_BRACKET,
 
     // Atom
-    IDENTIFIER
+    IDENTIFIER,
+    COMMENT
 }

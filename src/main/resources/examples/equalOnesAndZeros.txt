@@ -1,5 +1,7 @@
 name: "Equal Ones and Zeros"
-definition: "startState: start
+definition: "// Turing machine that accepts strings that contains equal number of ones and zeros
+// Example: '101001' ending in state 'accept'
+startState: start
 rules: {
   start: {
     0: {write: x, R: findOne}

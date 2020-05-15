@@ -1,5 +1,7 @@
 name: "Binary Increment"
-definition: "startState: right
+definition: "// Turing Machine that makes binary incrementation
+// Example: '101111' -> '110000'
+startState: right
  rules: {
    right: {
      [1,0]: R

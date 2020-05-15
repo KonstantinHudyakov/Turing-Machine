@@ -41,6 +41,9 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 
     @Override
     public TuringMachine analyze(List<Token> tokens) {
+        tokens = tokens.stream()
+                       .filter(token -> token.getType() != COMMENT)
+                       .collect(Collectors.toList());
         return new TuringMachineBuilder(tokens).build();
     }
 

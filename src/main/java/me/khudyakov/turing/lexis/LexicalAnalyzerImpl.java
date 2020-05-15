@@ -10,7 +10,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 
     public List<Token> analyze(String text) {
         List<Token> tokens = new ArrayList<>();
-        text = text.replaceAll("[\t\n\r]", " ");
+        text = text.replaceAll("[\t]", " ");
         int n = text.length();
         char[] arr = text.toCharArray();
         for (int i = 0; i < n; i++) {
@@ -25,9 +25,19 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                     if(" ".equals(word)) {
                         token = new Token(word, IDENTIFIER);
                     } else {
-                        throw new LexicalAnalyzerException("Unexpected symbol on ind: " + (i + 1));
+                        throw new LexicalAnalyzerException(String.format("Unexpected symbol '%c' on ind: %d", arr[i + 1], i + 1));
                     }
                     i += word.length() + 1;
+                    break;
+                }
+                case '/': {
+                    if(i + 1 > n || arr[i + 1] != '/') {
+                        throw new LexicalAnalyzerException(String.format("Unexpected symbol '%c' on ind: %d", arr[i], i));
+                    }
+                    i++;
+                    String comment = readUntil(text, i + 1, '\n');
+                    token = new Token(comment, COMMENT);
+                    i += comment.length() + 1;
                     break;
                 }
                 case ',': {
@@ -51,7 +61,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                     break;
                 }
                 default: {
-                    if(arr[i] == ' ') continue;
+                    if(arr[i] == ' ' || arr[i] == '\n') continue;
 
                     String word = readUntil(text, i, this::isDelimiter);
                     i += word.length() - 1;
