@@ -72,4 +72,4 @@ rules: {
   reject: {}
 }
 "
-input: "11111"
+input: "111"
