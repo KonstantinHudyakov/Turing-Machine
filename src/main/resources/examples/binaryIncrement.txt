@@ -2,16 +2,16 @@ name: "Binary Increment"
 definition: "// Turing Machine that makes binary incrementation
 // Example: '101111' -> '110000'
 startState: right
- rules: {
-   right: {
-     [1,0]: R
-     ' ': {L: carry}
-   }
-   carry: {
-     1: {write: 0, L}
-     [0, ' ']: {write: 1, L: done}
-   }
-   done: {}
- }
+rules: {
+  right: {
+    [1,0]: R
+    ' ': {L: carry}
+  }
+  carry: {
+    1: {write: 0, L}
+    [0, ' ']: {write: 1, L: done}
+  }
+  done: {}
+}
 "
 input: "10111"
