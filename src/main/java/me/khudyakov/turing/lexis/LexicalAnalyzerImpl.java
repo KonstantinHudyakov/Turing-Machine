@@ -72,9 +72,6 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                         case "rules":
                             token = new Token(word, RULES);
                             break;
-                        case "input":
-                            token = new Token(word, INPUT);
-                            break;
                         case "write":
                             token = new Token(word, WRITE);
                             break;
