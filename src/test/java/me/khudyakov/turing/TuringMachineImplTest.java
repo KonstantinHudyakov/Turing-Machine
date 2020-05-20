@@ -68,10 +68,12 @@ class TuringMachineImplTest {
         TuringMachine.Result result = turingMachine.execute(input);
         TuringMachine.Result expected = new TuringMachine.Result(expectedOutput, expectedEndState);
         assertEquals(expected, result);
+        System.out.println(result.toString());
     }
 
     private void testInput(TuringMachine turingMachine, String input, String expectedEndState) {
         TuringMachine.Result result = turingMachine.execute(input);
         assertEquals(expectedEndState, result.getEndState());
+        System.out.println("End state: " + result.getEndState());
     }
 }
