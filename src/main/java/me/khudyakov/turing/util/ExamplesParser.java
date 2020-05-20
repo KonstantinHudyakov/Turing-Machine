@@ -1,9 +1,8 @@
 package me.khudyakov.turing.util;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,33 +13,33 @@ public class ExamplesParser {
 
     public List<Example> loadExamples() throws IOException {
         List<Example> examples = new ArrayList<>();
-        File examplesFolder = getExamplesFolder();
+        String[] exampleFileNames = {"/examples/binaryIncrement.txt",
+                "/examples/equalOnesAndZeros.txt",
+                "/examples/primeLength.txt"};
 
-        File[] exampleFiles = examplesFolder.listFiles();
-        if (exampleFiles != null) {
-            for (File file : exampleFiles) {
-                examples.add(readExample(file));
-            }
+        for (String fileName : exampleFileNames) {
+            InputStream resourceStream = getResource(fileName);
+            examples.add(readExample(resourceStream));
         }
 
         return examples;
     }
 
-    private File getExamplesFolder() throws FileNotFoundException {
-        URL url = this.getClass().getClassLoader().getResource("examples");
-        if (url != null) {
-            return new File(url.getPath());
+    private InputStream getResource(String fileName) throws FileNotFoundException {
+        InputStream inputStream = this.getClass().getResourceAsStream(fileName);
+        if (inputStream != null) {
+            return inputStream;
         }
 
-        throw new FileNotFoundException("Not found folder: examples");
+        throw new FileNotFoundException("Not found resource: " + fileName);
     }
 
-    private Example readExample(File exampleFile) throws IOException {
-        Map<String, String> exampleMap = propertyReader.read(exampleFile);
+    private Example readExample(InputStream inputStream) throws IOException {
+        Map<String, String> exampleMap = propertyReader.read(inputStream);
         if (!exampleMap.containsKey("name")
                 || !exampleMap.containsKey("definition")
                 || !exampleMap.containsKey("input")) {
-            throw new IOException("Not found needed fields in example file: " + exampleFile.getName());
+            throw new IOException("Not found needed fields in example file");
         }
         return new Example(exampleMap.get("name"), exampleMap.get("definition"), exampleMap.get("input"));
     }

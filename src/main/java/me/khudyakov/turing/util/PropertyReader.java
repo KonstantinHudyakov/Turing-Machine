@@ -1,6 +1,9 @@
 package me.khudyakov.turing.util;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -9,9 +12,9 @@ public class PropertyReader {
 
     private static final String ERROR_FORMAT = "Wrong property format on ind %d:\n%s";
 
-    public Map<String, String> read(File file) throws IOException {
+    public Map<String, String> read(InputStream inputStream) throws IOException {
         Map<String, String> properties = new HashMap<>();
-        String content = readFileContent(file);
+        String content = readFileContent(inputStream);
         int curInd = 0;
         int n = content.length();
         String key = readWord(content, curInd);
@@ -35,8 +38,8 @@ public class PropertyReader {
         return properties;
     }
 
-    private String readFileContent(File file) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+    private String readFileContent(InputStream inputStream) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String content = reader.lines().collect(Collectors.joining("\n"));
         reader.close();
         return content;
@@ -53,11 +56,11 @@ public class PropertyReader {
     private String readQuotedProperty(String text, int fromInd) throws IOException {
         int curInd = fromInd;
         int n = text.length();
-        if(curInd > n || text.charAt(curInd) != '"') {
+        if (curInd > n || text.charAt(curInd) != '"') {
             throw new IOException(String.format(ERROR_FORMAT, curInd, text));
         }
         curInd = text.indexOf('"', curInd + 1);
-        if(curInd == -1) {
+        if (curInd == -1) {
             throw new IOException(String.format(ERROR_FORMAT, fromInd, text));
         }
 
@@ -67,8 +70,8 @@ public class PropertyReader {
     private int skipDelimiters(String text, int fromInd) {
         while (fromInd < text.length() &&
                 (text.charAt(fromInd) == ' '
-                || text.charAt(fromInd) == '\n'
-                || text.charAt(fromInd) == '\t')) {
+                        || text.charAt(fromInd) == '\n'
+                        || text.charAt(fromInd) == '\t')) {
             fromInd++;
         }
         return fromInd;
