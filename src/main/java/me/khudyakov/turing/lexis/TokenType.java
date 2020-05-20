@@ -4,7 +4,6 @@ public enum TokenType {
     // Keywords
     START_STATE,
     RULES,
-    INPUT,
     WRITE,
 
     // Delimiters

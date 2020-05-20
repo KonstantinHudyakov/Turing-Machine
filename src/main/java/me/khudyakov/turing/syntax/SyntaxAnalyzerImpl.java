@@ -19,7 +19,7 @@ import static me.khudyakov.turing.util.TokenUtils.*;
 
 /**
  * Grammar:
- * TURING_MACHINE -> START_DEF RULES_DEF INPUT_DEF
+ * TURING_MACHINE -> START_DEF RULES_DEF
  * START_DEF -> startState : ID
  * RULES_DEF -> rules : { RULE_LIST }
  * RULE_LIST -> RULE | RULE_LIST RULE
